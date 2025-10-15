@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tCATS 티켓츠 - 즐거움을 찾는 SeeK한 고양이</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 */
+        header {
+            background: linear-gradient(135deg, #00A6ED 0%, #0088CC 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            animation: logo-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes logo-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FFA500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            background: linear-gradient(rgba(0, 166, 237, 0.2), rgba(0, 153, 221, 0.3)), 
+                        url('images/main_img.png') center/cover no-repeat;
+            color: white;
+            padding: 150px 2rem 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            color: #FFA500;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.8);
+            letter-spacing: 3px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .cat-emoji {
+            font-size: 4rem;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .hero-cats {
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+            display: none; /* 배경 이미지가 있으므로 숨김 */
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(-5deg); }
+            75% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #FFA500;
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.6);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 165, 0, 0.8);
+        }
+
+        /* 섹션 공통 */
+        section {
+            padding: 80px 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+            font-weight: 800;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 4rem;
+        }
+
+        /* 서비스 프로세스 섹션 */
+        .process {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8FAB 100%);
+            color: white;
+        }
+
+        .process .section-title,
+        .process .section-subtitle {
+            color: white;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .process-step:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: #FFA500;
+            border-radius: 50%;
+            line-height: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .process-step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            opacity: 0.95;
+            font-size: 0.95rem;
+        }
+
+        /* 앱 기능 섹션 */
+        .app-features {
+            background: white;
+        }
+
+        .features-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            text-align: center;
+            position: relative;
+        }
+
+        .phone-frame {
+            width: 300px;
+            height: 600px;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8FAB 100%);
+            border-radius: 40px;
+            padding: 20px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .phone-screen h4 {
+            color: #FF6B9D;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .phone-screen .steps {
+            text-align: left;
+            width: 100%;
+        }
+
+        .phone-screen .steps li {
+            color: #FF6B9D;
+            margin: 0.8rem 0;
+            font-weight: 500;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #00A6ED;
+        }
+
+        .feature-item h4 {
+            color: #00A6ED;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-item p {
+            color: #666;
+        }
+
+        /* 티켓 샘플 섹션 */
+        .ticket-sample {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8FAB 100%);
+            color: white;
+        }
+
+        .ticket-sample .section-title,
+        .ticket-sample .section-subtitle {
+            color: white;
+        }
+
+        .ticket-display {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .ticket-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 320px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .ticket-header {
+            border-bottom: 3px dashed #FF6B9D;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ticket-code {
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ticket-info {
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        .ticket-info strong {
+            color: #FF6B9D;
+        }
+
+        .qr-placeholder {
+            width: 120px;
+            height: 120px;
+            background: #f0f0f0;
+            margin: 1rem auto;
+            border: 3px solid #FF6B9D;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .ticket-brand {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .ticket-brand-logo {
+            width: 240px;
+            height: auto;
+            margin: 1rem auto;
+            object-fit: contain;
+        }
+
+        .ticket-brand h3 {
+            color: #FF6B9D;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .ticket-brand p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* 문의 섹션 */
+        .contact {
+            background: white;
+            text-align: center;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, #00A6ED 0%, #0099DD 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 15px 50px rgba(0, 166, 237, 0.3);
+            position: relative;
+        }
+
+        .contact-cat {
+            width: 200px;
+            height: auto;
+            margin: 0 auto 1rem;
+            object-fit: contain;
+        }
+
+        .contact-box h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            text-align: left;
+            margin: 2rem auto;
+            max-width: 400px;
+        }
+
+        .contact-info p {
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .contact-info strong {
+            color: #FFA500;
+            display: inline-block;
+            width: 100px;
+        }
+
+        /* 푸터 */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+            margin: 0.5rem 0;
+        }
+
+        .footer-tagline {
+            color: #FFA500;
+            font-weight: 600;
+        }
+
+        .footer-logo {
+            width: 80px;
+            height: auto;
+            margin: 0 auto 1rem;
+            opacity: 0.7;
+            object-fit: contain;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .features-content {
+                grid-template-columns: 1fr;
+            }
+
+            .phone-frame {
+                width: 250px;
+                height: 500px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header>
+        <nav>
+            <div class="logo-text">tCATS</div>
+            <ul class="nav-links">
+                <li><a href="#service">서비스</a></li>
+                <li><a href="#features">기능</a></li>
+                <li><a href="#ticket">티켓</a></li>
+                <li><a href="#contact">문의</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <img src="images/cats.png" alt="티켓츠 고양이 캐릭터" class="hero-cats">
+        <h1>tCATS</h1>
+        <p class="subtitle">즐거움을 찾는 SeeK한 고양이</p>
+        <p>제작사에겐 고객 데이터를 바탕으로 한 리마케팅 서비스를<br>
+        소비자에겐 일대일 DM 큐레이팅을 통한 합리적 소비를<br>
+        공연 생태계가 자생적으로 성장할 수 있도록 하는 플랫폼</p>
+        <a href="#contact" class="cta-button">지금 시작하기</a>
+    </section>
+
+    <!-- 서비스 프로세스 -->
+    <section id="service" class="process">
+        <div class="container">
+            <h2 class="section-title">티켓 간편 발권 서비스</h2>
+            <p class="section-subtitle">Super easy Town, right?</p>
+            
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>QR 스캔 후 본인인증</h3>
+                    <p>빠르고 간편한 인증</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>예매 정보 입력</h3>
+                    <p>간단한 정보만 입력</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>좌석 선택</h3>
+                    <p>원하는 좌석 배정</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>티켓 발권</h3>
+                    <p>모바일 QR 티켓 발급</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">5</div>
+                    <h3>공연장 입장</h3>
+                    <p>QR로 간편 입장</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 앱 기능 -->
+    <section id="features" class="app-features">
+        <div class="container">
+            <h2 class="section-title">모바일 티켓팅의 모든 것</h2>
+            <p class="section-subtitle">하나의 앱으로 예매부터 입장까지</p>
+            
+            <div class="features-content">
+                <div class="phone-mockup">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <h4>Tcats</h4>
+                            <p style="font-size: 0.9rem; color: #999;">Step by step</p>
+                            <ol class="steps" style="list-style: none; padding: 0;">
+                                <li>1. QR코드 스캔 후 본인인증</li>
+                                <li>2. 예매 정보 입력</li>
+                                <li>3. 좌석 선택</li>
+                                <li>4. 티켓 발권</li>
+                                <li>5. 공연장 입장</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>📱 예매자 이름 입력</h4>
+                        <p>전화번호로 간편하게 예매 정보를 확인하세요</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>📞 전화번호 입력</h4>
+                        <p>본인 인증과 티켓 발급을 한번에</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>🎫 QR 입장권 발권</h4>
+                        <p>모바일로 받는 디지털 티켓</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>💺 좌석선택 (비지정 예매시)</h4>
+                        <p>최적의 좌석을 자동으로 배정받으세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 티켓 샘플 -->
+    <section id="ticket" class="ticket-sample">
+        <div class="container">
+            <h2 class="section-title">디지털 티켓 미리보기</h2>
+            <p class="section-subtitle">깔끔하고 편리한 모바일 티켓</p>
+            
+            <div class="ticket-display">
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <p style="color: #FF6B9D; font-weight: bold; margin-bottom: 0.5rem;">Ticket Code</p>
+                        <h3 class="ticket-code">SGJ/DIRKALAKPF-123456</h3>
+                    </div>
+                    
+                    <div class="ticket-info">
+                        <strong>Event</strong><br>
+                        티켓츠 런칭 행사
+                    </div>
+                    
+                    <div class="ticket-info">
+                        <strong>Date</strong> 8월 20일 &nbsp;&nbsp; <strong>Time</strong> 7시30분
+                    </div>
+                    
+                    <div class="ticket-info">
+                        <strong>Duration</strong> 100분
+                    </div>
+                    
+                    <div class="ticket-info">
+                        <strong>Place</strong> 부평테크시티
+                    </div>
+
+                    <div class="qr-placeholder">
+                        QR CODE
+                    </div>
+                </div>
+
+                <div class="ticket-card">
+                    <div style="text-align: center; padding: 2rem 0;">
+                        <p style="color: #999; font-size: 0.9rem; margin-bottom: 1rem;">CRE8BARA</p>
+                        <img src="images/cats.png" alt="티켓츠 로고" class="ticket-brand-logo">
+                        <div class="ticket-brand">
+                            <h3>TCATS</h3>
+                            <p>Convenience Ticket Subscribe</p>
+                        </div>
+                        <div style="margin-top: 2rem; color: #FF6B9D;">
+                            <span style="font-size: 1.2rem;">📘 📷</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 문의 섹션 -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">함께 성장하세요</h2>
+            <p class="section-subtitle">티켓츠와 함께 공연 시장의 새로운 가능성을 열어보세요</p>
+            
+            <div class="contact-box">
+                <img src="images/cats.png" alt="고양이" class="contact-cat">
+                <h3>무료 상담 신청</h3>
+                <div class="contact-info">
+                    <p><strong>이메일</strong> contact@tcats.co.kr</p>
+                    <p><strong>전화</strong> 02-1234-5678</p>
+                    <p><strong>주소</strong> 서울시 강남구</p>
+                </div>
+                <a href="mailto:contact@tcats.co.kr" class="cta-button" style="background: #FFA500; margin-top: 1rem;">이메일 문의하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>&copy; 2025 tCATS 티켓츠. All rights reserved.</p>
+        <p class="footer-tagline">Together, Empathy, Action, Mission</p>
+    </footer>
+</body>
+</html>
