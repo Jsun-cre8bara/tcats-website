@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -45,6 +46,42 @@
             text-decoration: none;
         }
 
+/* 헤더 */
+header {
+    background: linear-gradient(135deg, #00A6ED 0%, #0088CC 100%);
+    /* ... */
+}
+
+nav {
+    /* ... */
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-link img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    transition: opacity 0.3s;
+}
+
+/* 여기에 추가! */
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #FFA500;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-left: 0.5rem;  /* 이미지와 간격 */
+}
+
+.logo-link:hover img {
+    opacity: 0.8;
+}
         .logo-link img {
             width: 50px;
             height: 50px;
@@ -573,9 +610,10 @@
     <!-- 헤더 -->
     <header>
         <nav>
-            <a href="#home" class="logo-link">
-                <img src="images/cats.png" alt="tCATS">
-            </a>
+           <a href="#home" class="logo-link">
+    <img src="images/cats.png" alt="tCATS">
+    <span class="logo-text">tCATS</span>
+</a>
             <button class="menu-toggle" id="menuToggle">☰</button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#service">서비스</a></li>
