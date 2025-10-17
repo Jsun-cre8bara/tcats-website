@@ -46,8 +46,8 @@
         }
 
         .logo-link img {
-            width: 50px;
-            height: 50px;
+            width: 150px;
+            height: 150px;
             object-fit: contain;
             transition: opacity 0.3s;
         }
@@ -514,7 +514,8 @@
             }
 
             .logo-link span {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
+                letter-spacing: 2px;
             }
 
             .hero {
@@ -548,6 +549,18 @@
 
             .process-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* 모바일에서 연락처 정보 줄바꿈 개선 */
+            .contact-info strong {
+                display: block;
+                width: auto;
+                margin-bottom: 0.3rem;
+            }
+            
+            .contact-info p {
+                font-size: 1rem;
+                word-break: break-all;
             }
         }
 
@@ -735,7 +748,7 @@
     <section id="contact" class="contact">
         <div class="container">
             <h2 class="section-title">함께 성장하세요</h2>
-            <p class="section-subtitle">티켓츠와 함께 공연 시장의 새로운 가능성을 열어보세요</p>
+            <p class="section-subtitle">티켓츠와 함께 공연의 새로운 가능성을 열어보세요</p>
             
             <div class="contact-box">
                 <img src="images/cats.png" alt="고양이" class="contact-cat">
@@ -752,7 +765,7 @@
     <!-- 푸터 -->
     <footer>
         <p>&copy; 2025 tCATS 티켓츠. All rights reserved.</p>
-        <p class="footer-tagline">Together, Empathy, Action, Mission</p>
+        <p class="footer-tagline">We are One TEAM."Together, Empathy, Action, Mission"</p>
     </footer>
 
     <script>
