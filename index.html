@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tCATS 티켓츠 - 즐거움을 찾는 SeeK한 고양이</title>
+    <title>tCATS 티켓츠 - 즐거움을 아는 SeeK한 티켓츠</title>
     <style>
         * {
             margin: 0;
@@ -36,33 +36,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
         }
 
-        .logo-container {
+        .logo-link {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            text-decoration: none;
         }
 
-        .logo-img {
-            width: 60px;
-            height: 60px;
+        .logo-link img {
+            width: 50px;
+            height: 50px;
             object-fit: contain;
-            animation: logo-bounce 2s ease-in-out infinite;
+            transition: opacity 0.3s;
         }
 
-        @keyframes logo-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-
-        .logo-text {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: #FFA500;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .logo-link:hover img {
+            opacity: 0.8;
         }
 
         .nav-links {
@@ -82,12 +73,54 @@
             opacity: 0.8;
         }
 
+        /* 모바일 메뉴 */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 100px;
+                right: -100%;
+                flex-direction: column;
+                background: #00A6ED;
+                width: 70%;
+                max-width: 300px;
+                height: calc(100vh - 100px);
+                padding: 2rem;
+                gap: 1rem;
+                transition: right 0.3s ease;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid rgba(255,255,255,0.2);
+            }
+        }
+
         /* 히어로 섹션 */
         .hero {
             background: linear-gradient(rgba(0, 166, 237, 0.2), rgba(0, 153, 221, 0.3)), 
                         url('images/main_img.png') center/cover no-repeat;
             color: white;
-            padding: 150px 2rem 100px;
+            padding: 250px 2rem 100px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -108,11 +141,6 @@
         .hero > * {
             position: relative;
             z-index: 2;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
         }
 
         .hero h1 {
@@ -136,27 +164,7 @@
             margin-bottom: 2rem;
             opacity: 0.95;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-        }
-
-        .cat-emoji {
-            font-size: 4rem;
-            display: inline-block;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        .hero-cats {
-            max-width: 400px;
-            height: auto;
-            margin-bottom: 2rem;
-            animation: bounce 2s ease-in-out infinite;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
-            display: none; /* 배경 이미지가 있으므로 숨김 */
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-10px) rotate(-5deg); }
-            75% { transform: translateY(-10px) rotate(5deg); }
+            word-break: keep-all;
         }
 
         .cta-button {
@@ -304,6 +312,13 @@
             margin-bottom: 1rem;
         }
 
+        .phone-screen .phone-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
         .phone-screen .steps {
             text-align: left;
             width: 100%;
@@ -406,8 +421,8 @@
         }
 
         .ticket-brand-logo {
-            width: 240px;
-            height: auto;
+            width: 100px;
+            height: 100px;
             margin: 1rem auto;
             object-fit: contain;
         }
@@ -441,8 +456,8 @@
         }
 
         .contact-cat {
-            width: 200px;
-            height: auto;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 1rem;
             object-fit: contain;
         }
@@ -487,18 +502,35 @@
             font-weight: 600;
         }
 
-        .footer-logo {
-            width: 80px;
-            height: auto;
-            margin: 0 auto 1rem;
-            opacity: 0.7;
-            object-fit: contain;
-        }
-
         /* 반응형 */
         @media (max-width: 768px) {
+            nav {
+                padding: 0 1rem;
+            }
+
+            .logo-link img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .logo-link span {
+                font-size: 1.5rem;
+            }
+
+            .hero {
+                padding: 180px 2rem 80px;
+            }
+
             .hero h1 {
                 font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
             }
 
             .features-content {
@@ -510,10 +542,6 @@
                 height: 500px;
             }
 
-            .nav-links {
-                display: none;
-            }
-
             .section-title {
                 font-size: 2rem;
             }
@@ -522,14 +550,22 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 <body>
     <!-- 헤더 -->
     <header>
         <nav>
-            <div class="logo-text">tCATS</div>
-            <ul class="nav-links">
+            <a href="#home" class="logo-link">
+                <img src="images/cats.png" alt="tCATS">
+                <span>tCATS</span>
+            </a>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#service">서비스</a></li>
                 <li><a href="#features">기능</a></li>
                 <li><a href="https://jsun-cre8bara.github.io/tCATS-MVP/" target="_blank">데모</a></li>
@@ -540,21 +576,18 @@
     </header>
 
     <!-- 히어로 섹션 -->
-    <section class="hero">
-        <img src="images/cats.png" alt="티켓츠 고양이 캐릭터" class="hero-cats">
+    <section id="home" class="hero">
         <h1>tCATS</h1>
-        <p class="subtitle">즐거움을 찾는 SeeK한 고양이</p>
-        <p>제작사에겐 고객 데이터를 바탕으로 한 리마케팅 서비스를<br>
-        소비자에겐 일대일 DM 큐레이팅을 통한 합리적 소비를<br>
-        공연 생태계가 자생적으로 성장할 수 있도록 하는 플랫폼</p>
-        <a href="#contact" class="cta-button">지금 시작하기</a>
+        <p class="subtitle">즐거움을 아는 SeeK한 티켓츠</p>
+        <p>"제작사에게 관객데이터를 기반한 리마케팅 플랫폼 서비스"를 "관객에게 DM 큐레이팅으로 합리적 소비"로 "공연 생태계가 새로운 가치와 함께 성장할 수 있도록" 돕는 플랫폼입니다.</p>
+        <a href="https://jsun-cre8bara.github.io/tCATS-MVP/" target="_blank" class="cta-button">지금 시작하기</a>
     </section>
 
     <!-- 서비스 프로세스 -->
     <section id="service" class="process">
         <div class="container">
             <h2 class="section-title">티켓 간편 발권 서비스</h2>
-            <p class="section-subtitle">Super easy Town, right?</p>
+            <p class="section-subtitle">Super easy ticketing. right?</p>
             
             <div class="process-grid">
                 <div class="process-step">
@@ -586,6 +619,12 @@
                     <h3>공연장 입장</h3>
                     <p>QR로 간편 입장</p>
                 </div>
+
+                <div class="process-step">
+                    <div class="step-number">6</div>
+                    <h3>리뷰 & 리워드</h3>
+                    <p>공연 만족도 평가, 리워드, 재관람 또는 지인 추천</p>
+                </div>
             </div>
         </div>
     </section>
@@ -600,6 +639,7 @@
                 <div class="phone-mockup">
                     <div class="phone-frame">
                         <div class="phone-screen">
+                            <img src="images/cats.png" alt="tCATS 로고" class="phone-logo">
                             <h4>Tcats</h4>
                             <p style="font-size: 0.9rem; color: #999;">Step by step</p>
                             <ol class="steps" style="list-style: none; padding: 0;">
@@ -608,6 +648,7 @@
                                 <li>3. 좌석 선택</li>
                                 <li>4. 티켓 발권</li>
                                 <li>5. 공연장 입장</li>
+                                <li>6. 리뷰 & 리워드</li>
                             </ol>
                         </div>
                     </div>
@@ -700,11 +741,10 @@
                 <img src="images/cats.png" alt="고양이" class="contact-cat">
                 <h3>무료 상담 신청</h3>
                 <div class="contact-info">
-                    <p><strong>이메일</strong> contact@tcats.co.kr</p>
-                    <p><strong>전화</strong> 02-1234-5678</p>
-                    <p><strong>주소</strong> 서울시 강남구</p>
+                    <p><strong>이메일</strong> seek.tcats@gmail.com</p>
+                    <p><strong>전화</strong> 02-1661-1301</p>
                 </div>
-                <a href="mailto:contact@tcats.co.kr" class="cta-button" style="background: #FFA500; margin-top: 1rem;">이메일 문의하기</a>
+                <a href="mailto:seek.tcats@gmail.com" class="cta-button" style="background: #FFA500; margin-top: 1rem;">이메일 문의하기</a>
             </div>
         </div>
     </section>
@@ -714,5 +754,30 @@
         <p>&copy; 2025 tCATS 티켓츠. All rights reserved.</p>
         <p class="footer-tagline">Together, Empathy, Action, Mission</p>
     </footer>
+
+    <script>
+        // 모바일 메뉴 토글
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // 메뉴 링크 클릭 시 메뉴 닫기
+        const links = document.querySelectorAll('.nav-links a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // 외부 클릭 시 메뉴 닫기
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
