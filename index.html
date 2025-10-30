@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -47,47 +45,20 @@
             text-decoration: none;
         }
 
-/* 헤더 */
-header {
-    background: linear-gradient(135deg, #00A6ED 0%, #0088CC 100%);
-    /* ... */
-}
-
-nav {
-    /* ... */
-}
-
-.logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-}
-
-.logo-link img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    transition: opacity 0.3s;
-}
-
-/* 여기에 추가! */
-.logo-text {
-    font-size: 1.8rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #FFA500;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-left: 0.5rem;  /* 이미지와 간격 */
-}
-
-.logo-link:hover img {
-    opacity: 0.8;
-}
         .logo-link img {
             width: 50px;
             height: 50px;
             object-fit: contain;
             transition: opacity 0.3s;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FFA500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-left: 0.5rem;
         }
 
         .logo-link:hover img {
@@ -247,6 +218,20 @@ nav {
             font-size: 1.2rem;
             color: #666;
             margin-bottom: 4rem;
+        }
+
+        /* 영상 섹션 */
+        .video-section {
+            background: #f8f9fa;
+        }
+
+        .video-horizontal {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .video-vertical {
+            display: none;
         }
 
         /* 서비스 프로세스 섹션 */
@@ -551,9 +536,9 @@ nav {
                 height: 80px;
             }
 
-            .logo-link span {
-                font-size: 1.8rem;
-                letter-spacing: 2px;
+            .logo-text {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
             }
 
             .hero {
@@ -570,6 +555,17 @@ nav {
 
             .hero .subtitle {
                 font-size: 1.2rem;
+            }
+
+            /* 모바일에서 영상 전환 */
+            .video-horizontal {
+                display: none;
+            }
+            
+            .video-vertical {
+                display: block;
+                max-width: 400px;
+                margin: 0 auto;
             }
 
             .features-content {
@@ -589,7 +585,6 @@ nav {
                 grid-template-columns: 1fr;
             }
 
-            /* 모바일에서 연락처 정보 줄바꿈 개선 */
             .contact-info strong {
                 display: block;
                 width: auto;
@@ -611,12 +606,13 @@ nav {
     <!-- 헤더 -->
     <header>
         <nav>
-           <a href="#home" class="logo-link">
-    <img src="images/cats.png" alt="tCATS">
-    <span class="logo-text">tCATS</span>
-</a>
+            <a href="#home" class="logo-link">
+                <img src="images/cats.png" alt="tCATS">
+                <span class="logo-text">tCATS</span>
+            </a>
             <button class="menu-toggle" id="menuToggle">☰</button>
             <ul class="nav-links" id="navLinks">
+                <li><a href="#video">영상</a></li>
                 <li><a href="#service">서비스</a></li>
                 <li><a href="#features">기능</a></li>
                 <li><a href="https://jsun-cre8bara.github.io/tCATS-MVP/" target="_blank">데모</a></li>
@@ -633,25 +629,41 @@ nav {
         <p>"제작사에게 관객데이터를 기반한 리마케팅 플랫폼 서비스"를 "관객에게 DM 큐레이팅으로 합리적 소비"로 "공연 생태계가 새로운 가치와 함께 성장할 수 있도록" 돕는 플랫폼입니다.</p>
         <a href="https://jsun-cre8bara.github.io/tCATS-MVP/" target="_blank" class="cta-button">지금 시작하기</a>
     </section>
-<!-- 히어로 섹션 바로 아래에 영상 추가 -->
-<section style="padding: 80px 2rem; background: #f8f9fa; text-align: center;">
-    <div class="container">
-        <h2 class="section-title">tCATS 홍보 영상</h2>
-        <p class="section-subtitle">티켓츠의 혁신적인 서비스를 영상으로 만나보세요</p>
-        
-        <div style="max-width: 600px; margin: 0 auto;">
-            <video 
-                width="100%" 
-                height="auto" 
-                controls 
-                style="border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);"
-                poster="images/video-thumbnail.jpg">
-                <source src="videos/vertical04_voice.mp4" type="video/mp4">
-                브라우저가 비디오를 지원하지 않습니다.
-            </video>
+
+    <!-- 홍보 영상 섹션 -->
+    <section id="video" class="video-section">
+        <div class="container">
+            <h2 class="section-title">tCATS 홍보 영상</h2>
+            <p class="section-subtitle">티켓츠의 혁신적인 서비스를 영상으로 만나보세요</p>
+            
+            <!-- PC용 가로형 영상 -->
+            <div class="video-horizontal">
+                <video 
+                    width="100%" 
+                    height="auto" 
+                    controls 
+                    preload="metadata"
+                    style="border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                    <source src="videos/horizontal.mp4" type="video/mp4">
+                    브라우저가 비디오를 지원하지 않습니다.
+                </video>
+            </div>
+
+            <!-- 모바일용 세로형 영상 -->
+            <div class="video-vertical">
+                <video 
+                    width="100%" 
+                    height="auto" 
+                    controls 
+                    preload="metadata"
+                    style="border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                    <source src="videos/vertical.mp4" type="video/mp4">
+                    브라우저가 비디오를 지원하지 않습니다.
+                </video>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
     <!-- 서비스 프로세스 -->
     <section id="service" class="process">
         <div class="container">
