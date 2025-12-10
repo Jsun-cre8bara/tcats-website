@@ -624,7 +624,7 @@
             position: fixed;
             right: 20px;
             top: 50%;
-            transform: translateY(-50%);
+            margin-top: -100px; /* 높이의 절반만큼 위로 */
             z-index: 999;
             width: 200px;
             max-width: 90%;
@@ -633,11 +633,16 @@
             transition: box-shadow 0.3s ease;
             cursor: move;
             user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            touch-action: none;
         }
         
         .floating-banner.dragging {
             transition: none;
             cursor: grabbing;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
         
         .floating-banner:hover {
@@ -650,6 +655,7 @@
             display: block;
             border-radius: 15px;
             pointer-events: none;
+            user-select: none;
         }
         
         @media (max-width: 768px) {
@@ -1013,105 +1019,88 @@
             const banner = document.querySelector('.floating-banner');
             if (banner) {
                 let isDragging = false;
+                let startX, startY;
+                let currentX = 0, currentY = 0;
                 let hasMoved = false;
-                let currentX;
-                let currentY;
-                let initialX;
-                let initialY;
-                let xOffset = 0;
-                let yOffset = 0;
-                let startX = 0;
-                let startY = 0;
                 
-                banner.addEventListener('mousedown', dragStart);
-                banner.addEventListener('touchstart', dragStart);
+                banner.addEventListener('mousedown', startDrag);
+                banner.addEventListener('touchstart', startDrag, { passive: false });
                 
-                document.addEventListener('mousemove', drag);
-                document.addEventListener('touchmove', drag);
-                
-                document.addEventListener('mouseup', dragEnd);
-                document.addEventListener('touchend', dragEnd);
-                
-                function dragStart(e) {
-                    if (e.type === 'touchstart') {
-                        initialX = e.touches[0].clientX - xOffset;
-                        initialY = e.touches[0].clientY - yOffset;
-                        startX = e.touches[0].clientX;
-                        startY = e.touches[0].clientY;
-                    } else {
-                        initialX = e.clientX - xOffset;
-                        initialY = e.clientY - yOffset;
-                        startX = e.clientX;
-                        startY = e.clientY;
-                    }
-                    
+                function startDrag(e) {
                     isDragging = true;
                     hasMoved = false;
-                }
-                
-                function drag(e) {
-                    if (isDragging) {
-                        let clientX, clientY;
-                        
-                        if (e.type === 'touchmove') {
-                            clientX = e.touches[0].clientX;
-                            clientY = e.touches[0].clientY;
-                        } else {
-                            clientX = e.clientX;
-                            clientY = e.clientY;
-                        }
-                        
-                        // 5px 이상 움직이면 드래그로 인식
-                        const moveX = Math.abs(clientX - startX);
-                        const moveY = Math.abs(clientY - startY);
-                        
-                        if (moveX > 5 || moveY > 5) {
-                            hasMoved = true;
-                            banner.classList.add('dragging');
-                            e.preventDefault();
-                            
-                            currentX = clientX - initialX;
-                            currentY = clientY - initialY;
-                            
-                            xOffset = currentX;
-                            yOffset = currentY;
-                            
-                            // 화면 경계 체크
-                            const bannerRect = banner.getBoundingClientRect();
-                            const maxX = window.innerWidth - bannerRect.width;
-                            const maxY = window.innerHeight - bannerRect.height;
-                            
-                            currentX = Math.max(0, Math.min(currentX, maxX));
-                            currentY = Math.max(0, Math.min(currentY, maxY));
-                            
-                            setTranslate(currentX, currentY, banner);
-                        }
+                    banner.classList.add('dragging');
+                    
+                    if (e.type === 'touchstart') {
+                        startX = e.touches[0].clientX - currentX;
+                        startY = e.touches[0].clientY - currentY;
+                    } else {
+                        startX = e.clientX - currentX;
+                        startY = e.clientY - currentY;
                     }
+                    
+                    console.log('Drag started');
                 }
                 
-                function dragEnd(e) {
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('touchmove', onDrag, { passive: false });
+                
+                function onDrag(e) {
+                    if (!isDragging) return;
+                    
+                    e.preventDefault();
+                    hasMoved = true;
+                    
+                    let clientX, clientY;
+                    
+                    if (e.type === 'touchmove') {
+                        clientX = e.touches[0].clientX;
+                        clientY = e.touches[0].clientY;
+                    } else {
+                        clientX = e.clientX;
+                        clientY = e.clientY;
+                    }
+                    
+                    currentX = clientX - startX;
+                    currentY = clientY - startY;
+                    
+                    // 화면 경계 체크
+                    const rect = banner.getBoundingClientRect();
+                    const maxX = window.innerWidth - rect.width;
+                    const maxY = window.innerHeight - rect.height;
+                    
+                    currentX = Math.max(0, Math.min(currentX, maxX));
+                    currentY = Math.max(0, Math.min(currentY, maxY));
+                    
+                    banner.style.left = currentX + 'px';
+                    banner.style.top = currentY + 'px';
+                    banner.style.right = 'auto';
+                    banner.style.transform = 'none';
+                }
+                
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchend', stopDrag);
+                
+                function stopDrag(e) {
                     if (isDragging) {
-                        initialX = currentX;
-                        initialY = currentY;
                         isDragging = false;
                         banner.classList.remove('dragging');
                         
-                        // 클릭으로 인식 (거의 움직이지 않음)
+                        // 움직이지 않았으면 클릭으로 인식
                         if (!hasMoved) {
                             window.location.href = '#contact';
                         }
+                        
+                        console.log('Drag ended');
                     }
                 }
                 
-                function setTranslate(xPos, yPos, el) {
-                    el.style.transform = `translate(${xPos}px, ${yPos}px)`;
-                    el.style.right = 'auto';
-                    el.style.top = 'auto';
-                    el.style.left = '0';
-                    el.style.bottom = '0';
-                }
+                // 초기 위치 설정
+                const rect = banner.getBoundingClientRect();
+                currentX = rect.left;
+                currentY = rect.top;
                 
-                console.log('Floating banner drag initialized');
+                console.log('Floating banner drag initialized', { currentX, currentY });
             }
         });
     </script>
