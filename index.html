@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -126,12 +127,29 @@
 
         /* 히어로 섹션 */
         .hero {
-            background: linear-gradient(rgba(0, 166, 237, 0.2), rgba(0, 153, 221, 0.3)), 
-                        url('images/main_img.png') center/cover no-repeat;
+            background: linear-gradient(rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.5)), 
+                        url('main_BG_img.png') center/cover no-repeat;
             color: white;
             padding: 250px 2rem 100px;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 2%, transparent 2%),
+                radial-gradient(circle at 60% 80%, rgba(255,255,255,0.1) 2%, transparent 2%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 1.5%, transparent 1.5%);
+            background-size: 100px 100px;
+            opacity: 0.5;
+            pointer-events: none;
             overflow: hidden;
             min-height: 600px;
         }
@@ -600,6 +618,46 @@
         html {
             scroll-behavior: smooth;
         }
+        
+        /* 플로팅 배너 */
+        .floating-banner {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            width: 200px;
+            max-width: 90%;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: box-shadow 0.3s ease;
+            cursor: move;
+            user-select: none;
+        }
+        
+        .floating-banner.dragging {
+            transition: none;
+            cursor: grabbing;
+        }
+        
+        .floating-banner:hover {
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+        
+        .floating-banner img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .floating-banner {
+                width: 120px;
+                right: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -607,7 +665,7 @@
     <header>
         <nav>
             <a href="#home" class="logo-link">
-                <img src="images/cats.png" alt="tCATS">
+                <img src="logo.png" alt="tCATS" style="width: 80px; height: 80px; object-fit: contain;">
                 <span class="logo-text">tCATS</span>
             </a>
             <button class="menu-toggle" id="menuToggle">☰</button>
@@ -615,7 +673,7 @@
                 <li><a href="#video">영상</a></li>
                 <li><a href="#service">서비스</a></li>
                 <li><a href="#features">기능</a></li>
-                <li><a href="https://jsun-cre8bara.github.io/tCATS-MVP/" target="_blank">데모</a></li>
+                <li><a href="dashboard.html">데모</a></li>
                 <li><a href="#ticket">티켓</a></li>
                 <li><a href="#contact">문의</a></li>
             </ul>
@@ -637,29 +695,102 @@
             <p class="section-subtitle">티켓츠의 혁신적인 서비스를 영상으로 만나보세요</p>
             
             <!-- PC용 가로형 영상 -->
-            <div class="video-horizontal">
+            <div class="video-horizontal" style="position: relative;">
                 <video 
+                    id="horizontal-video"
                     width="100%" 
                     height="auto" 
-                    controls 
                     preload="metadata"
-                    style="border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                    poster="tcats_title_logo.jpg"
+                    style="position: relative; z-index: 1; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: block; min-height: 400px; background: #000;">
                     <source src="videos/horizontal.mp4" type="video/mp4">
                     브라우저가 비디오를 지원하지 않습니다.
                 </video>
+                
+                <!-- 썸네일 오버레이 -->
+                <div id="horizontal-overlay" style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.3);
+                    border-radius: 20px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10;">
+                    <!-- 재생 버튼 -->
+                    <div style="
+                        width: 100px;
+                        height: 100px;
+                        background: rgba(255, 255, 255, 0.95);
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+                        transition: all 0.3s;
+                        pointer-events: none;">
+                        <div style="
+                            width: 0;
+                            height: 0;
+                            border-left: 30px solid #E15E6E;
+                            border-top: 18px solid transparent;
+                            border-bottom: 18px solid transparent;
+                            margin-left: 8px;"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- 모바일용 세로형 영상 -->
-            <div class="video-vertical">
+            <div class="video-vertical" style="position: relative;">
                 <video 
+                    id="vertical-video"
                     width="100%" 
                     height="auto" 
-                    controls 
                     preload="metadata"
-                    style="border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                    poster="tcats_title_logo.jpg"
+                    style="position: relative; z-index: 1; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: block; min-height: 500px; background: #000;">
                     <source src="videos/vertical.mp4" type="video/mp4">
                     브라우저가 비디오를 지원하지 않습니다.
                 </video>
+                
+                <!-- 썸네일 오버레이 -->
+                <div id="vertical-overlay" style="
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.3);
+                    border-radius: 20px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10;">
+                    <!-- 재생 버튼 -->
+                    <div style="
+                        width: 80px;
+                        height: 80px;
+                        background: rgba(255, 255, 255, 0.95);
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+                        pointer-events: none;">
+                        <div style="
+                            width: 0;
+                            height: 0;
+                            border-left: 24px solid #E15E6E;
+                            border-top: 15px solid transparent;
+                            border-bottom: 15px solid transparent;
+                            margin-left: 6px;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -700,12 +831,6 @@
                     <h3>공연장 입장</h3>
                     <p>QR로 간편 입장</p>
                 </div>
-
-                <div class="process-step">
-                    <div class="step-number">6</div>
-                    <h3>리뷰 & 리워드</h3>
-                    <p>공연 만족도 평가, 리워드, 재관람 또는 지인 추천</p>
-                </div>
             </div>
         </div>
     </section>
@@ -720,7 +845,7 @@
                 <div class="phone-mockup">
                     <div class="phone-frame">
                         <div class="phone-screen">
-                            <img src="images/cats.png" alt="tCATS 로고" class="phone-logo">
+                            <img src="logo.png" alt="tCATS 로고" class="phone-logo">
                             <h4>tCATS</h4>
                             <p style="font-size: 0.9rem; color: #999;">Step by step</p>
                             <ol class="steps" style="list-style: none; padding: 0;">
@@ -729,7 +854,6 @@
                                 <li>3. 좌석 선택</li>
                                 <li>4. 티켓 발권</li>
                                 <li>5. 공연장 입장</li>
-                                <li>6. 리뷰 & 리워드</li>
                             </ol>
                         </div>
                     </div>
@@ -766,48 +890,13 @@
             <h2 class="section-title">QR 입장권 미리보기</h2>
             <p class="section-subtitle">깔끔하고 편리한 QR 입장권</p>
             
-            <div class="ticket-display">
-                <div class="ticket-card">
-                    <div class="ticket-header">
-                        <p style="color: #FF6B9D; font-weight: bold; margin-bottom: 0.5rem;">Ticket Code</p>
-                        <h3 class="ticket-code">SGJ/DIRKALAKPF-123456</h3>
-                    </div>
-                    
-                    <div class="ticket-info">
-                        <strong>Event</strong><br>
-                        티켓츠 런칭 행사
-                    </div>
-                    
-                    <div class="ticket-info">
-                        <strong>Date</strong> 8월 20일 &nbsp;&nbsp; <strong>Time</strong> 7시30분
-                    </div>
-                    
-                    <div class="ticket-info">
-                        <strong>Duration</strong> 100분
-                    </div>
-                    
-                    <div class="ticket-info">
-                        <strong>Place</strong> 부평테크시티 1009호
-                    </div>
-
-                    <div class="qr-placeholder">
-                        QR CODE
-                    </div>
-                </div>
-
-                <div class="ticket-card">
-                    <div style="text-align: center; padding: 2rem 0;">
-                        <p style="color: #999; font-size: 0.9rem; margin-bottom: 1rem;">CRE8BARA</p>
-                        <img src="images/cats.png" alt="티켓츠 로고" class="ticket-brand-logo">
-                        <div class="ticket-brand">
-                            <h3>tCATS</h3>
-                            <p>Convenience Ticket Subscribe</p>
-                        </div>
-                        <div style="margin-top: 2rem; color: #FF6B9D;">
-                            <span style="font-size: 1.2rem;">📘 📷</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- 티켓 목업 이미지 -->
+            <div style="display: flex; justify-content: center; margin-top: 3rem;">
+                <img src="mockup.png" alt="티켓 목업" style="
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 20px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
             </div>
         </div>
     </section>
@@ -819,10 +908,10 @@
             <p class="section-subtitle">티켓츠와 함께 공연의 새로운 가능성을 열어보세요</p>
             
             <div class="contact-box">
-                <img src="images/cats.png" alt="고양이" class="contact-cat">
+                <img src="logo.png" alt="고양이" class="contact-cat">
                 <h3>무료 상담 신청</h3>
                 <div class="contact-info">
-                    <p><strong>이메일</strong> seek.tcats@gmail.com</p>
+                    <p><strong>이메일</strong> <a href="mailto:seek.tcats@gmail.com">seek.tcats@gmail.com</a></p>
                     <p><strong>전화</strong> 02-1661-1301</p>
                 </div>
                 <a href="mailto:seek.tcats@gmail.com" class="cta-button" style="background: #FFA500; margin-top: 1rem;">이메일 문의하기</a>
@@ -832,33 +921,204 @@
 
     <!-- 푸터 -->
     <footer>
-        <p>&copy; CRE*BARA Inc. All rights reserved.</p>
+        <p>&copy; CRE8BARA Inc. All rights reserved.</p>
         <p class="footer-tagline">We are One TEAM."Together, Empathy, Action, Mission"</p>
     </footer>
 
     <script>
-        // 모바일 메뉴 토글
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // 메뉴 링크 클릭 시 메뉴 닫기
-        const links = document.querySelectorAll('.nav-links a');
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
+        // 동영상 재생 함수
+        function playVideo(type) {
+            const video = document.getElementById(type + '-video');
+            const overlay = document.getElementById(type + '-overlay');
+            
+            if (!video || !overlay) {
+                console.error('Video or overlay not found:', type);
+                return;
+            }
+            
+            console.log('Playing video:', type);
+            
+            // 오버레이 숨기기
+            overlay.style.display = 'none';
+            
+            // 컨트롤 표시
+            video.controls = true;
+            
+            // 동영상 재생
+            video.play().then(() => {
+                console.log('Video playing successfully');
+            }).catch(err => {
+                console.error('Play error:', err);
             });
-        });
-
-        // 외부 클릭 시 메뉴 닫기
-        document.addEventListener('click', (e) => {
-            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-                navLinks.classList.remove('active');
+        }
+        
+        // 페이지 로드 후 이벤트 리스너 등록
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded - initializing...');
+            
+            // 모바일 메뉴 토글
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Menu toggle clicked');
+                    navLinks.classList.toggle('active');
+                });
+                
+                // 메뉴 링크 클릭 시 메뉴 닫기
+                const links = document.querySelectorAll('.nav-links a');
+                links.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('active');
+                    });
+                });
+                
+                console.log('Mobile menu initialized');
+            } else {
+                console.error('Menu elements not found', {
+                    menuToggle: menuToggle,
+                    navLinks: navLinks
+                });
+            }
+            
+            // PC용 동영상
+            const horizontalOverlay = document.getElementById('horizontal-overlay');
+            if (horizontalOverlay) {
+                horizontalOverlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Horizontal overlay clicked');
+                    playVideo('horizontal');
+                });
+                console.log('Horizontal overlay click listener added');
+            } else {
+                console.error('Horizontal overlay not found');
+            }
+            
+            // 모바일용 동영상
+            const verticalOverlay = document.getElementById('vertical-overlay');
+            if (verticalOverlay) {
+                verticalOverlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Vertical overlay clicked');
+                    playVideo('vertical');
+                });
+                console.log('Vertical overlay click listener added');
+            } else {
+                console.error('Vertical overlay not found');
+            }
+            
+            // 플로팅 배너 드래그 기능
+            const banner = document.querySelector('.floating-banner');
+            if (banner) {
+                let isDragging = false;
+                let hasMoved = false;
+                let currentX;
+                let currentY;
+                let initialX;
+                let initialY;
+                let xOffset = 0;
+                let yOffset = 0;
+                let startX = 0;
+                let startY = 0;
+                
+                banner.addEventListener('mousedown', dragStart);
+                banner.addEventListener('touchstart', dragStart);
+                
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', drag);
+                
+                document.addEventListener('mouseup', dragEnd);
+                document.addEventListener('touchend', dragEnd);
+                
+                function dragStart(e) {
+                    if (e.type === 'touchstart') {
+                        initialX = e.touches[0].clientX - xOffset;
+                        initialY = e.touches[0].clientY - yOffset;
+                        startX = e.touches[0].clientX;
+                        startY = e.touches[0].clientY;
+                    } else {
+                        initialX = e.clientX - xOffset;
+                        initialY = e.clientY - yOffset;
+                        startX = e.clientX;
+                        startY = e.clientY;
+                    }
+                    
+                    isDragging = true;
+                    hasMoved = false;
+                }
+                
+                function drag(e) {
+                    if (isDragging) {
+                        let clientX, clientY;
+                        
+                        if (e.type === 'touchmove') {
+                            clientX = e.touches[0].clientX;
+                            clientY = e.touches[0].clientY;
+                        } else {
+                            clientX = e.clientX;
+                            clientY = e.clientY;
+                        }
+                        
+                        // 5px 이상 움직이면 드래그로 인식
+                        const moveX = Math.abs(clientX - startX);
+                        const moveY = Math.abs(clientY - startY);
+                        
+                        if (moveX > 5 || moveY > 5) {
+                            hasMoved = true;
+                            banner.classList.add('dragging');
+                            e.preventDefault();
+                            
+                            currentX = clientX - initialX;
+                            currentY = clientY - initialY;
+                            
+                            xOffset = currentX;
+                            yOffset = currentY;
+                            
+                            // 화면 경계 체크
+                            const bannerRect = banner.getBoundingClientRect();
+                            const maxX = window.innerWidth - bannerRect.width;
+                            const maxY = window.innerHeight - bannerRect.height;
+                            
+                            currentX = Math.max(0, Math.min(currentX, maxX));
+                            currentY = Math.max(0, Math.min(currentY, maxY));
+                            
+                            setTranslate(currentX, currentY, banner);
+                        }
+                    }
+                }
+                
+                function dragEnd(e) {
+                    if (isDragging) {
+                        initialX = currentX;
+                        initialY = currentY;
+                        isDragging = false;
+                        banner.classList.remove('dragging');
+                        
+                        // 클릭으로 인식 (거의 움직이지 않음)
+                        if (!hasMoved) {
+                            window.location.href = '#contact';
+                        }
+                    }
+                }
+                
+                function setTranslate(xPos, yPos, el) {
+                    el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+                    el.style.right = 'auto';
+                    el.style.top = 'auto';
+                    el.style.left = '0';
+                    el.style.bottom = '0';
+                }
+                
+                console.log('Floating banner drag initialized');
             }
         });
     </script>
+    
+    <!-- 플로팅 배너 -->
+    <div class="floating-banner" title="드래그해서 이동할 수 있습니다">
+        <img src="banner.png" alt="티켓츠 배너">
+    </div>
 </body>
 </html>
